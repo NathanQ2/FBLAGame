@@ -1,37 +1,11 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public enum TileType
-{
-    None = -1,
-    Grass,
-    Farmland,
-    FarmlandSeeds,
-    Water
-}
-
-public struct TileData
-{
-    public TileType Type;
-    public Tile Tile;
-
-    public TileData(Tile tile, TileType type)
-    {
-        Tile = tile;
-        Type = type;
-    }
-
-    public TileData(Tile tile) : this(tile, WorldTileManager.TileTypeFromName(tile.name)) { }
-
-    public bool CanBecomeFarmland() => Type is TileType.Grass or TileType.FarmlandSeeds;
-    public bool CanBecomeFarmlandSeeds() => Type is TileType.Farmland;
-}
-
 public class WorldTileManager : MonoBehaviour
 {
     public Tilemap tilemap;
+    public static float Timescale = 1.0f;
     private Dictionary<Vector3Int, TileData> m_tiles = new Dictionary<Vector3Int, TileData>();
 
     public Tile farmlandTile;
@@ -48,8 +22,16 @@ public class WorldTileManager : MonoBehaviour
             {
                 Vector3Int pos = new Vector3Int(Mathf.FloorToInt(x), Mathf.FloorToInt(y), 0);
                 Tile tile = tilemap.GetTile<Tile>(pos);
-                m_tiles.Add(pos, new TileData(tile));
+                m_tiles.Add(pos, new TileData(tile, pos, tilemap));
             }
+        }
+    }
+
+    public void Update()
+    {
+        foreach ((Vector3Int pos, TileData data) in m_tiles)
+        {
+            data.Update();
         }
     }
 
@@ -63,8 +45,7 @@ public class WorldTileManager : MonoBehaviour
             return false;
 
         tilemap.SetTile(pos, farmlandTile);
-        var tile = m_tiles[pos];
-        tile.Type = TileType.Farmland;
+        FarmlandTileData tile = new FarmlandTileData(m_tiles[pos], TileType.Farmland, FarmlandTileData.DefaultGrowthTimeSeconds);
         m_tiles[pos] = tile;
 
         return true;
@@ -76,8 +57,7 @@ public class WorldTileManager : MonoBehaviour
             return false;
         
         tilemap.SetTile(pos, farmlandSeedsTile);
-        var tile = m_tiles[pos];
-        tile.Type = TileType.FarmlandSeeds;
+        FarmlandTileData tile = new FarmlandTileData(m_tiles[pos], TileType.FarmlandSeeds, FarmlandTileData.DefaultGrowthTimeSeconds);
         m_tiles[pos] = tile;
 
         return true;
