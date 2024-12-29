@@ -4,7 +4,9 @@ using UnityEngine.Tilemaps;
 public enum ControlMode
 {
     None,
-    Farm
+    FarmPlow,
+    FarmPlant,
+    FarmHarvest
 }
 
 public class PlayerController : MonoBehaviour
@@ -53,16 +55,29 @@ public class PlayerController : MonoBehaviour
         
         animator.SetInteger("Direction", m_direction);
     }
+
+    private static bool ControlModeIsFarm(ControlMode mode) => mode is ControlMode.FarmPlow or ControlMode.FarmPlant or ControlMode.FarmHarvest;
+    
         
     private void Farm()
     {
         if (Input.GetButtonDown("ToggleFarmMode"))
         {
             uiTilemap.ClearAllTiles();
-            m_activeMode = m_activeMode == ControlMode.Farm ? ControlMode.None : ControlMode.Farm;
+            m_activeMode = ControlModeIsFarm(m_activeMode) ? ControlMode.None : ControlMode.FarmPlow;
         }
 
-        if (m_activeMode == ControlMode.Farm)
+        if (ControlModeIsFarm(m_activeMode))
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+                m_activeMode = ControlMode.FarmPlow;
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+                m_activeMode = ControlMode.FarmPlant;
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+                m_activeMode = ControlMode.FarmHarvest;
+        }
+
+        if (m_activeMode == ControlMode.FarmPlow)
         {
             uiTilemap.ClearAllTiles();
 
@@ -80,6 +95,31 @@ public class PlayerController : MonoBehaviour
                 if (Input.GetButton("Fire1"))
                 {
                     tileManager.TryToFarmland(pos);
+                }
+            }
+            else
+            {
+                highlightTile.color = Color.red;
+            }
+        }
+        else if (m_activeMode == ControlMode.FarmPlant)
+        {
+            uiTilemap.ClearAllTiles();
+
+            Vector3 world = camera.ScreenToWorldPoint(Input.mousePosition);
+
+            Vector3Int pos = uiTilemap.WorldToCell(world);
+
+            uiTilemap.SetTile(pos, highlightTile);
+            
+            // Get world tile
+            if (tileManager.CanBecomeFarmlandSeeds(pos))
+            {
+                highlightTile.color = Color.green;
+
+                if (Input.GetButton("Fire1"))
+                {
+                    tileManager.TryToFarmlandSeeds(pos);
                 }
             }
             else

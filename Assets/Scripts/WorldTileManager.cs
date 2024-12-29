@@ -25,7 +25,8 @@ public struct TileData
 
     public TileData(Tile tile) : this(tile, WorldTileManager.TileTypeFromName(tile.name)) { }
 
-    public bool CanBecomeFarmland() => Type == TileType.Grass;
+    public bool CanBecomeFarmland() => Type is TileType.Grass or TileType.FarmlandSeeds;
+    public bool CanBecomeFarmlandSeeds() => Type is TileType.Farmland;
 }
 
 public class WorldTileManager : MonoBehaviour
@@ -34,6 +35,7 @@ public class WorldTileManager : MonoBehaviour
     private Dictionary<Vector3Int, TileData> m_tiles = new Dictionary<Vector3Int, TileData>();
 
     public Tile farmlandTile;
+    public Tile farmlandSeedsTile;
 
     public void Start()
     {
@@ -52,6 +54,8 @@ public class WorldTileManager : MonoBehaviour
     }
 
     public bool CanBecomeFarmland(Vector3Int pos) => m_tiles[pos].CanBecomeFarmland();
+    public bool CanBecomeFarmlandSeeds(Vector3Int pos) => m_tiles[pos].CanBecomeFarmlandSeeds();
+    
     
     public bool TryToFarmland(Vector3Int pos)
     {
@@ -61,6 +65,19 @@ public class WorldTileManager : MonoBehaviour
         tilemap.SetTile(pos, farmlandTile);
         var tile = m_tiles[pos];
         tile.Type = TileType.Farmland;
+        m_tiles[pos] = tile;
+
+        return true;
+    }
+
+    public bool TryToFarmlandSeeds(Vector3Int pos)
+    {
+        if (!CanBecomeFarmlandSeeds(pos))
+            return false;
+        
+        tilemap.SetTile(pos, farmlandSeedsTile);
+        var tile = m_tiles[pos];
+        tile.Type = TileType.FarmlandSeeds;
         m_tiles[pos] = tile;
 
         return true;
