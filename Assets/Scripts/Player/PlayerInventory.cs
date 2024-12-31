@@ -12,11 +12,14 @@ public class PlayerInventory : MonoBehaviour
         public Sprite GetIcon();
         public int GetCount();
         public ItemType GetType();
+        
+        public string AsString() => $"Type: {GetType()}, Count: {GetCount()}";
     }
 
     public class Seeds : IInventoryItem
     {
-        public static Sprite Icon; 
+        public static Sprite Icon;
+        public static Seeds OneStack => new Seeds(StackSize);
         public static readonly int StackSize = 100;
 
         private int m_count;
@@ -43,12 +46,21 @@ public class PlayerInventory : MonoBehaviour
         public Sprite GetIcon() => Icon;
         public int GetCount() => m_count;
         public new ItemType GetType() => ItemType.Seeds;
+
     }
 
     private List<IInventoryItem> m_inventoryItems = new List<IInventoryItem>();
 
-    public void Start()
+    public void AddItem(IInventoryItem item)
     {
-        m_inventoryItems.AddRange(Seeds.FromCount(250));
+        m_inventoryItems.Add(item);
+    }
+
+    public void Update()
+    {
+        foreach (IInventoryItem item in m_inventoryItems)
+        {
+            Debug.Log($"ITEM: {item.AsString()}");
+        }
     }
 }
