@@ -5,6 +5,7 @@ public class PlayerManager : MonoBehaviour
 {
     public static readonly int StartingMoney = 500;
 
+    public GameUIManager UIManager;
     public StoreManager StoreManager;
     public PlayerInventory Inventory;
 
@@ -12,8 +13,6 @@ public class PlayerManager : MonoBehaviour
     
     public void Start()
     {
-        // Test stuff
-        TryPurchase(StoreItems.StoreItemType.Seeds);
     }
 
     public void Update()
@@ -22,6 +21,16 @@ public class PlayerManager : MonoBehaviour
         // {
             // TODO: make this open a store gui
         // }
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            UIManager.ToggleStore();
+        }
+    }
+
+    public void TryPurchaseSeeds()
+    {
+        TryPurchase(StoreItems.StoreItemType.Seeds);
     }
 
     private bool TryPurchase(StoreItems.StoreItemType type)
