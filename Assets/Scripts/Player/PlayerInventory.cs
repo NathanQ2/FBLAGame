@@ -1,66 +1,59 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class PlayerInventory : MonoBehaviour
+namespace Player
 {
-    public enum ItemType
+    public class PlayerInventory : MonoBehaviour
     {
-        Seeds
-    }
-    public interface IInventoryItem
-    {
-        public Sprite GetIcon();
-        public int GetCount();
-        public ItemType GetType();
-        
-        public string AsString() => $"Type: {GetType()}, Count: {GetCount()}";
-    }
-
-    public class Seeds : IInventoryItem
-    {
-        public static Sprite Icon;
-        public static Seeds OneStack => new Seeds(StackSize);
-        public static readonly int StackSize = 100;
-
-        private int m_count;
-
-        public Seeds(int count)
+        public interface IInventoryItem
         {
-            m_count = Mathf.Clamp(count, 0, StackSize);
+            public Sprite GetIcon();
+            public int GetCount();
         }
 
-        public static Seeds[] FromCount(int count)
+        public class Seeds : IInventoryItem
         {
-            Seeds[] result = new Seeds[Mathf.CeilToInt((float)count / StackSize)];
-            int i = 0;
-            while (count > 0)
+            public static Sprite Icon;
+            public static Seeds OneStack => new Seeds(StackSize);
+            public static readonly int StackSize = 100;
+
+            private int m_count;
+
+            public Seeds(int count)
             {
-                result[i] = new Seeds(count);
-                count -= StackSize;
-                i++;
+                m_count = Mathf.Clamp(count, 0, StackSize);
             }
 
-            return result;
-        }
+            public static Seeds[] FromCount(int count)
+            {
+                Seeds[] result = new Seeds[Mathf.CeilToInt((float)count / StackSize)];
+                int i = 0;
+                while (count > 0)
+                {
+                    result[i] = new Seeds(count);
+                    count -= StackSize;
+                    i++;
+                }
+
+                return result;
+            }
         
-        public Sprite GetIcon() => Icon;
-        public int GetCount() => m_count;
-        public new ItemType GetType() => ItemType.Seeds;
+            public Sprite GetIcon() => Icon;
+            public int GetCount() => m_count;
 
-    }
-
-    private List<IInventoryItem> m_inventoryItems = new List<IInventoryItem>();
-
-    public void AddItem(IInventoryItem item)
-    {
-        m_inventoryItems.Add(item);
-    }
-
-    public void Update()
-    {
-        foreach (IInventoryItem item in m_inventoryItems)
-        {
-            Debug.Log($"ITEM: {item.AsString()}");
+            public override string ToString() => $"ItemType: Seeds, Count: {GetCount()}";
         }
+
+        private List<IInventoryItem> m_inventoryItems = new List<IInventoryItem>();
+
+        public void AddItem(IInventoryItem item)
+        {
+            m_inventoryItems.Add(item);
+        }
+
+        public T[] GetItemsByType<T>() where T : IInventoryItem => m_inventoryItems.OfType<T>().ToArray();
+
+        public int GetCountForType<T>() where T : IInventoryItem => m_inventoryItems.OfType<T>().Sum(inventoryItem => inventoryItem.GetCount());
     }
 }

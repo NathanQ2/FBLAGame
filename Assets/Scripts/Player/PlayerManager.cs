@@ -1,3 +1,4 @@
+using Player;
 using Store;
 using UnityEngine;
 
@@ -5,7 +6,7 @@ public class PlayerManager : MonoBehaviour
 {
     public static readonly int StartingMoney = 500;
 
-    public GameUIManager UIManager;
+    public UIManager UIManager;
     public StoreManager StoreManager;
     public PlayerInventory Inventory;
 
@@ -22,9 +23,14 @@ public class PlayerManager : MonoBehaviour
             // TODO: make this open a store gui
         // }
 
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             UIManager.ToggleStore();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            ToggleInventory();
         }
     }
 
@@ -44,5 +50,10 @@ public class PlayerManager : MonoBehaviour
         Inventory.AddItem(item);
 
         return true;
+    }
+
+    private void ToggleInventory()
+    {
+        UIManager.ToggleInventory();
     }
 }
