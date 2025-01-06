@@ -28,7 +28,7 @@ namespace Player
 
             public static IInventoryItem[] FromCount(int count)
             {
-                Seeds[] result = new Seeds[Mathf.CeilToInt((float)count / StackSize)];
+                IInventoryItem[] result = new IInventoryItem[Mathf.CeilToInt((float)count / StackSize)];
                 int i = 0;
                 while (count > 0)
                 {
@@ -91,6 +91,45 @@ namespace Player
             public override string ToString() => $"ItemType: Seeds, Count: {GetCount()}";
         }
 
+        public class Pesticide : IInventoryItem
+        {
+            public static Sprite Icon;
+            public static Pesticide OneStack => new Pesticide(StackSize);
+            public static readonly int StackSize = 10;
+
+            private int m_count;
+
+            public Pesticide(int count)
+            {
+                m_count = Mathf.Clamp(count, 0, StackSize);
+            }
+
+            public static IInventoryItem[] FromCount(int count)
+            {
+                IInventoryItem[] result = new IInventoryItem[Mathf.CeilToInt((float)count / StackSize)];
+                int i = 0;
+
+                while (count > 0)
+                {
+                    result[i] = new Pesticide(count);
+                    count -= StackSize;
+                    i++;
+                }
+
+                return result;
+            }
+
+            public Sprite GetIcon() => Icon;
+            public int GetCount() => m_count;
+
+            public void SetCount(int count)
+            {
+                m_count = Mathf.Clamp(count, 0, StackSize);
+            }
+
+            public override string ToString() => $"ItemType: Pesticide, Count: {GetCount()}";
+        }
+        
         private List<IInventoryItem> m_inventoryItems = new List<IInventoryItem>();
 
         public void AddItem(IInventoryItem item)

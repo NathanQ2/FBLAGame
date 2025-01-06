@@ -22,7 +22,7 @@ namespace Store
         public static class Pesticide
         {
             public static string Name = "Pesticide";
-            public static int Cost = 250;
+            public const int Cost = 350;
             public static string Description = "TEMP";
             public static string[] Pros = {
                 "Increases Crop Yields"
@@ -35,7 +35,7 @@ namespace Store
         public static class Seeds
         {
             public static string Name => "Seeds";
-            public static int Cost => 50;
+            public const int Cost = 50;
             public static string Description => "Used to plant crops";
         }
     }

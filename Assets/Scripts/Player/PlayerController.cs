@@ -1,6 +1,5 @@
 using Player;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 
 public enum ControlMode

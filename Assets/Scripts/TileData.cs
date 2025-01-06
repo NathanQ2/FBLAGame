@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Util;
 
 public enum TileType
 {
@@ -59,19 +61,46 @@ public class TileData
 public class FarmlandTileData : TileData
 {
     public static readonly float DefaultGrowthTimeSeconds = 1 * 60;
+    public const float DefaultGrowthScale = 1.0f;
+
+    private static float s_growthScale = DefaultGrowthScale;
+    public static float GrowthScale
+    {
+        get => s_growthScale; 
+        set
+        {
+            s_growthScale = value;
+
+            foreach (Timer timer in Timers)
+            {
+                timer.TimeScale = value;
+            }
+        }
+    }
+
+    private static readonly List<Timer> Timers = new List<Timer>();
+
+    public static float GrowthTimeSeconds => DefaultGrowthTimeSeconds * GrowthScale;
     
     private Timer m_growthTimer;
     
     public FarmlandTileData(Tile tile, TileType type, Vector3Int position, WorldTileManager parentTilemap, float growthTimeSeconds) : base(tile, type, position, parentTilemap)
     {
         Debug.Assert(IsFarmland(type));
-        m_growthTimer = new Timer(growthTimeSeconds, ToGrown);
+        m_growthTimer = new Timer(growthTimeSeconds, ToGrown, GrowthScale);
+        Timers.Add(m_growthTimer);
 
         if (type == TileType.FarmlandSeeds)
         {
             m_growthTimer.Start();
         }
     }
+
+    ~FarmlandTileData()
+    {
+        Timers.Remove(m_growthTimer);
+    }
+    
     public FarmlandTileData(Tile tile, Vector3Int position, WorldTileManager parentTilemap, float growthTimeSeconds) : this(tile, TileTypeFromName(tile.name), position, parentTilemap, growthTimeSeconds)
     { }
 
@@ -88,6 +117,6 @@ public class FarmlandTileData : TileData
 
     public override void Update()
     {
-        m_growthTimer.Update(Time.deltaTime * WorldTileManager.Timescale);
+        m_growthTimer.Update(Time.deltaTime * GameManager.GameTimeScale);
     }
 }

@@ -11,18 +11,9 @@ public class PlayerManager : MonoBehaviour
     public PlayerInventory Inventory;
 
     public int CurrentMoney { get; private set; } = StartingMoney;
-    
-    public void Start()
-    {
-    }
 
     public void Update()
     {
-        // if (Input.GetButtonDown("ToggleStore"))
-        // {
-            // TODO: make this open a store gui
-        // }
-
         if (Input.GetKeyDown(KeyCode.Q))
         {
             UIManager.ToggleStore();
@@ -39,6 +30,11 @@ public class PlayerManager : MonoBehaviour
         TryPurchase(StoreItems.StoreItemType.Seeds);
     }
 
+    public void TryPurchasePesticide()
+    {
+        TryPurchase(StoreItems.StoreItemType.Pesticide);
+    }
+
     private bool TryPurchase(StoreItems.StoreItemType type)
     {
         int cost = StoreItems.TypeToCost(type);
@@ -46,8 +42,9 @@ public class PlayerManager : MonoBehaviour
         if (cost > CurrentMoney)
             return false;
         
-        CurrentMoney -= StoreManager.Purchase(StoreItems.StoreItemType.Seeds, out PlayerInventory.IInventoryItem item);
-        Inventory.AddItem(item);
+        CurrentMoney -= StoreManager.Purchase(type, out PlayerInventory.IInventoryItem item);
+        if (item is not null)
+            Inventory.AddItem(item);
 
         return true;
     }
