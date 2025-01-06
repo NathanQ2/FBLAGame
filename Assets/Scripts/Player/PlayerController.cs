@@ -1,5 +1,6 @@
 using Player;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 
 public enum ControlMode
@@ -25,7 +26,8 @@ public class PlayerController : MonoBehaviour
 
     private ControlMode m_activeMode;
 
-    public PlayerInventory Inventory;
+    public PlayerInventory PlayerInventory;
+    public PlayerManager PlayerManager;
 
     private void Start()
     {
@@ -97,7 +99,6 @@ public class PlayerController : MonoBehaviour
                 if (Input.GetButton("Fire1"))
                 {
                     tileManager.TryToFarmland(pos);
-                    Inventory.AddItems(PlayerInventory.Wheat.FromCount(5));
                 }
             }
             else
@@ -114,14 +115,14 @@ public class PlayerController : MonoBehaviour
             uiTilemap.SetTile(pos, highlightTile);
             
             // Get world tile
-            if (tileManager.CanBecomeFarmlandSeeds(pos) && Inventory.GetCountForType<PlayerInventory.Seeds>() > 0)
+            if (tileManager.CanBecomeFarmlandSeeds(pos) && PlayerInventory.GetCountForType<PlayerInventory.Seeds>() > 0)
             {
                 highlightTile.color = Color.green;
 
-                if (Input.GetButton("Fire1") && Inventory.GetCountForType<PlayerInventory.Seeds>() >= 5)
+                if (Input.GetButton("Fire1") && PlayerInventory.GetCountForType<PlayerInventory.Seeds>() >= 5)
                 {
                     if (tileManager.TryToFarmlandSeeds(pos))
-                        Inventory.RemoveTypeByCount<PlayerInventory.Seeds>(5);
+                        PlayerInventory.RemoveTypeByCount<PlayerInventory.Seeds>(5);
                 }
             }
             else
@@ -146,7 +147,7 @@ public class PlayerController : MonoBehaviour
                 {
                     // Harvest
                     tileManager.TryToFarmland(pos);
-                    
+                    PlayerManager.AddMoney(15);
                 }
             }
             else

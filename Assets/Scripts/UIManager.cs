@@ -92,8 +92,9 @@ public class UIManager : MonoBehaviour
     private void RefreshInventory()
     {
         TextMeshProUGUI[] texts = InventoryUI.GetComponentsInChildren<TextMeshProUGUI>();
-        texts[1].SetText($"Seeds: {PlayerManager.Inventory.GetCountForType<PlayerInventory.Seeds>()}");
-        texts[2].SetText($"Wheat: {PlayerManager.Inventory.GetCountForType<PlayerInventory.Wheat>()}");
+        texts[1].SetText($"Money: {PlayerManager.CurrentMoney}");
+        texts[2].SetText($"Seeds: {PlayerManager.Inventory.GetCountForType<PlayerInventory.Seeds>()}");
+        texts[3].SetText($"Wheat: {PlayerManager.Inventory.GetCountForType<PlayerInventory.Wheat>()}");
     }
 
     public void CloseInventory()

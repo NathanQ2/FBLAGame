@@ -108,7 +108,7 @@ namespace Player
 
         public void RemoveTypeByCount<T>(int count)
         {
-            foreach (IInventoryItem item in m_inventoryItems.OfType<T>())
+            foreach (IInventoryItem item in m_inventoryItems.OfType<T>().ToList())
             {
                 if (item.GetCount() - count <= 0)
                 {

@@ -52,6 +52,11 @@ public class PlayerManager : MonoBehaviour
         return true;
     }
 
+    public void AddMoney(int money)
+    {
+        CurrentMoney += money;
+    }
+
     private void ToggleInventory()
     {
         UIManager.ToggleInventory();
