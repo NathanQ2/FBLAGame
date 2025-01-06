@@ -7,6 +7,7 @@ public enum TileType
     Grass,
     Farmland,
     FarmlandSeeds,
+    FarmlandGrown,
     Water
 }
 
@@ -15,10 +16,12 @@ public class TileData
     public TileType Type;
     public Tile Tile;
 
-    public readonly Tilemap ParentTilemap;
+    public readonly WorldTileManager ParentTilemap;
     public readonly Vector3Int Position;
 
-    public TileData(Tile tile, TileType type, Vector3Int position, Tilemap parentTilemap)
+    public static Tile FarmlandGrownTile;
+
+    public TileData(Tile tile, TileType type, Vector3Int position, WorldTileManager parentTilemap)
     {
         Tile = tile;
         Type = type;
@@ -26,17 +29,31 @@ public class TileData
         Position = position;
     }
 
-    public TileData(Tile tile, Vector3Int position, Tilemap parentTilemap) : this(tile, WorldTileManager.TileTypeFromName(tile.name), position, parentTilemap) { }
+    public TileData(Tile tile, Vector3Int position, WorldTileManager parentTilemap) : this(tile, TileTypeFromName(tile.name), position, parentTilemap) { }
 
-    public bool CanBecomeFarmland() => Type is TileType.Grass or TileType.FarmlandSeeds;
+    public bool CanBecomeFarmland() => Type is TileType.Grass or TileType.FarmlandSeeds or TileType.FarmlandGrown;
     public bool CanBecomeFarmlandSeeds() => Type is TileType.Farmland;
+    public bool CanBeHarvested() => Type is TileType.FarmlandGrown;
 
     public bool IsFarmland() => IsFarmland(Type);
 
     public virtual void Update()
     { }
 
-    public static bool IsFarmland(TileType type) => type is TileType.Farmland or TileType.FarmlandSeeds;
+    public static bool IsFarmland(TileType type) => type is TileType.Farmland or TileType.FarmlandSeeds or TileType.FarmlandGrown;
+
+    public static TileType TileTypeFromName(string name)
+    {
+        return name switch
+        {
+            "Tilemap_Water" => TileType.Water,
+            "Tilemap_Grass" => TileType.Grass,
+            "Tilemap_Farmland" => TileType.Farmland,
+            "Tilemap_FarmlandSeeds" => TileType.FarmlandSeeds,
+            "Tilemap_FarmlandGrown" => TileType.FarmlandGrown,
+            _ => TileType.None
+        };
+    }
 }
 
 public class FarmlandTileData : TileData
@@ -45,7 +62,7 @@ public class FarmlandTileData : TileData
     
     private Timer m_growthTimer;
     
-    public FarmlandTileData(Tile tile, TileType type, Vector3Int position, Tilemap parentTilemap, float growthTimeSeconds) : base(tile, type, position, parentTilemap)
+    public FarmlandTileData(Tile tile, TileType type, Vector3Int position, WorldTileManager parentTilemap, float growthTimeSeconds) : base(tile, type, position, parentTilemap)
     {
         Debug.Assert(IsFarmland(type));
         m_growthTimer = new Timer(growthTimeSeconds, ToGrown);
@@ -55,7 +72,7 @@ public class FarmlandTileData : TileData
             m_growthTimer.Start();
         }
     }
-    public FarmlandTileData(Tile tile, Vector3Int position, Tilemap parentTilemap, float growthTimeSeconds) : this(tile, WorldTileManager.TileTypeFromName(tile.name), position, parentTilemap, growthTimeSeconds)
+    public FarmlandTileData(Tile tile, Vector3Int position, WorldTileManager parentTilemap, float growthTimeSeconds) : this(tile, TileTypeFromName(tile.name), position, parentTilemap, growthTimeSeconds)
     { }
 
     public FarmlandTileData(TileData other, TileType newType, float growthTimeSeconds) : this(other.Tile, newType, other.Position,
@@ -64,7 +81,9 @@ public class FarmlandTileData : TileData
 
     public void ToGrown()
     {
-        Debug.Log("Grown!");
+        ParentTilemap.tilemap.SetTile(Position, FarmlandGrownTile);
+        Type = TileType.FarmlandGrown;
+        Tile = FarmlandGrownTile;
     }
 
     public override void Update()

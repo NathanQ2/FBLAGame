@@ -100,7 +100,7 @@ ScriptedImporter:
     spritePosition: {x: 0, y: 0}
   multiSpriteImportData: []
   layeredSpriteImportData:
-  - name: Sand
+  - name: Crop
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -112,7 +112,7 @@ ScriptedImporter:
       y: 4
       width: 16
       height: 16
-    spriteID: aabbf0cf1f33746df853d81d14abb173
+    spriteID: fd546e985bbe14fc7a381adfe78c8349
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -121,8 +121,8 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
-    spritePosition: {x: 32, y: 32}
-  - name: FarmlandSeeds
+    spritePosition: {x: 48, y: 48}
+  - name: Sand
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -134,7 +134,7 @@ ScriptedImporter:
       y: 28
       width: 16
       height: 16
-    spriteID: 8b3598fabc72049b3a7cf655c220dff4
+    spriteID: aabbf0cf1f33746df853d81d14abb173
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -143,8 +143,8 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 28}
-    spritePosition: {x: 16, y: 32}
-  - name: Stone
+    spritePosition: {x: 32, y: 32}
+  - name: FarmlandSeeds
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -156,7 +156,7 @@ ScriptedImporter:
       y: 52
       width: 16
       height: 16
-    spriteID: 6d8b7575be58048829d4c9769c5a31d1
+    spriteID: 8b3598fabc72049b3a7cf655c220dff4
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -165,8 +165,8 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 52}
-    spritePosition: {x: 16, y: 48}
-  - name: Farmland
+    spritePosition: {x: 16, y: 32}
+  - name: Stone
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -178,7 +178,7 @@ ScriptedImporter:
       y: 76
       width: 16
       height: 16
-    spriteID: 6b509587dd14f4c40b1df3e7ed1b3160
+    spriteID: 6d8b7575be58048829d4c9769c5a31d1
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -187,8 +187,8 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 76}
-    spritePosition: {x: 0, y: 32}
-  - name: Grass
+    spritePosition: {x: 16, y: 48}
+  - name: Farmland
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -200,7 +200,7 @@ ScriptedImporter:
       y: 100
       width: 16
       height: 16
-    spriteID: c40373d2bc0f94bb991bc54d58448fda
+    spriteID: 6b509587dd14f4c40b1df3e7ed1b3160
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -209,8 +209,8 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 100}
-    spritePosition: {x: 0, y: 48}
-  - name: Water
+    spritePosition: {x: 0, y: 32}
+  - name: Grass
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -222,7 +222,7 @@ ScriptedImporter:
       y: 4
       width: 16
       height: 16
-    spriteID: ed219f4daeb52443da31bfe421246f63
+    spriteID: c40373d2bc0f94bb991bc54d58448fda
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -231,6 +231,28 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 28, y: 4}
+    spritePosition: {x: 0, y: 48}
+  - name: Water
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 28
+      y: 28
+      width: 16
+      height: 16
+    spriteID: ed219f4daeb52443da31bfe421246f63
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 28, y: 28}
     spritePosition: {x: 32, y: 48}
   spriteImportData: []
   rigSpriteImportData: []
@@ -295,13 +317,23 @@ ScriptedImporter:
   resliceFromLayer: 0
   pSDLayerImportSetting: []
   psdLayers:
+  - name: Crop
+    spriteName: Crop
+    isGroup: 0
+    parentIndex: -1
+    spriteID: fd546e985bbe14fc7a381adfe78c8349
+    layerID: 26
+    mosaicPosition: {x: 4, y: 4}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
   - name: Sand
     spriteName: Sand
     isGroup: 0
     parentIndex: -1
     spriteID: aabbf0cf1f33746df853d81d14abb173
     layerID: 19
-    mosaicPosition: {x: 4, y: 4}
+    mosaicPosition: {x: 4, y: 28}
     flatten: 0
     isImported: 1
     isVisible: 1
@@ -311,7 +343,7 @@ ScriptedImporter:
     parentIndex: -1
     spriteID: 8b3598fabc72049b3a7cf655c220dff4
     layerID: 13
-    mosaicPosition: {x: 4, y: 28}
+    mosaicPosition: {x: 4, y: 52}
     flatten: 0
     isImported: 1
     isVisible: 1
@@ -321,7 +353,7 @@ ScriptedImporter:
     parentIndex: -1
     spriteID: 6d8b7575be58048829d4c9769c5a31d1
     layerID: 7
-    mosaicPosition: {x: 4, y: 52}
+    mosaicPosition: {x: 4, y: 76}
     flatten: 0
     isImported: 1
     isVisible: 1
@@ -331,7 +363,7 @@ ScriptedImporter:
     parentIndex: -1
     spriteID: 6b509587dd14f4c40b1df3e7ed1b3160
     layerID: 9
-    mosaicPosition: {x: 4, y: 76}
+    mosaicPosition: {x: 4, y: 100}
     flatten: 0
     isImported: 1
     isVisible: 1
@@ -341,7 +373,7 @@ ScriptedImporter:
     parentIndex: -1
     spriteID: c40373d2bc0f94bb991bc54d58448fda
     layerID: 8
-    mosaicPosition: {x: 4, y: 100}
+    mosaicPosition: {x: 28, y: 4}
     flatten: 0
     isImported: 1
     isVisible: 1
@@ -351,7 +383,7 @@ ScriptedImporter:
     parentIndex: -1
     spriteID: ed219f4daeb52443da31bfe421246f63
     layerID: 6
-    mosaicPosition: {x: 28, y: 4}
+    mosaicPosition: {x: 28, y: 28}
     flatten: 0
     isImported: 1
     isVisible: 1

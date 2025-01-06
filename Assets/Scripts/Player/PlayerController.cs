@@ -1,3 +1,4 @@
+using Player;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -23,6 +24,8 @@ public class PlayerController : MonoBehaviour
     public WorldTileManager tileManager;
 
     private ControlMode m_activeMode;
+
+    public PlayerInventory Inventory;
 
     private void Start()
     {
@@ -75,12 +78,11 @@ public class PlayerController : MonoBehaviour
                 m_activeMode = ControlMode.FarmPlant;
             if (Input.GetKeyDown(KeyCode.Alpha3))
                 m_activeMode = ControlMode.FarmHarvest;
+            uiTilemap.ClearAllTiles();
         }
 
         if (m_activeMode == ControlMode.FarmPlow)
         {
-            uiTilemap.ClearAllTiles();
-
             Vector3 world = camera.ScreenToWorldPoint(Input.mousePosition);
 
             Vector3Int pos = uiTilemap.WorldToCell(world);
@@ -95,6 +97,7 @@ public class PlayerController : MonoBehaviour
                 if (Input.GetButton("Fire1"))
                 {
                     tileManager.TryToFarmland(pos);
+                    Inventory.AddItems(PlayerInventory.Wheat.FromCount(5));
                 }
             }
             else
@@ -104,8 +107,6 @@ public class PlayerController : MonoBehaviour
         }
         else if (m_activeMode == ControlMode.FarmPlant)
         {
-            uiTilemap.ClearAllTiles();
-
             Vector3 world = camera.ScreenToWorldPoint(Input.mousePosition);
 
             Vector3Int pos = uiTilemap.WorldToCell(world);
@@ -113,13 +114,39 @@ public class PlayerController : MonoBehaviour
             uiTilemap.SetTile(pos, highlightTile);
             
             // Get world tile
-            if (tileManager.CanBecomeFarmlandSeeds(pos))
+            if (tileManager.CanBecomeFarmlandSeeds(pos) && Inventory.GetCountForType<PlayerInventory.Seeds>() > 0)
+            {
+                highlightTile.color = Color.green;
+
+                if (Input.GetButton("Fire1") && Inventory.GetCountForType<PlayerInventory.Seeds>() >= 5)
+                {
+                    if (tileManager.TryToFarmlandSeeds(pos))
+                        Inventory.RemoveTypeByCount<PlayerInventory.Seeds>(5);
+                }
+            }
+            else
+            {
+                highlightTile.color = Color.red;
+            }
+        }
+        else if (m_activeMode == ControlMode.FarmHarvest)
+        {
+            Vector3 world = camera.ScreenToWorldPoint(Input.mousePosition);
+
+            Vector3Int pos = uiTilemap.WorldToCell(world);
+
+            uiTilemap.SetTile(pos, highlightTile);
+            
+            // Get world tile
+            if (tileManager.CanBeHarvested(pos))
             {
                 highlightTile.color = Color.green;
 
                 if (Input.GetButton("Fire1"))
                 {
-                    tileManager.TryToFarmlandSeeds(pos);
+                    // Harvest
+                    tileManager.TryToFarmland(pos);
+                    
                 }
             }
             else

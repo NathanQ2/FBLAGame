@@ -10,6 +10,7 @@ namespace Player
         {
             public Sprite GetIcon();
             public int GetCount();
+            public void SetCount(int count);
         }
 
         public class Seeds : IInventoryItem
@@ -25,7 +26,7 @@ namespace Player
                 m_count = Mathf.Clamp(count, 0, StackSize);
             }
 
-            public static Seeds[] FromCount(int count)
+            public static IInventoryItem[] FromCount(int count)
             {
                 Seeds[] result = new Seeds[Mathf.CeilToInt((float)count / StackSize)];
                 int i = 0;
@@ -42,6 +43,51 @@ namespace Player
             public Sprite GetIcon() => Icon;
             public int GetCount() => m_count;
 
+            public void SetCount(int count)
+            {
+                m_count = Mathf.Clamp(count, 0, StackSize);
+            }
+
+            public override string ToString() => $"ItemType: Seeds, Count: {GetCount()}";
+        }
+
+        public class Wheat : IInventoryItem
+        {
+            public static Sprite Icon;
+            
+            public static Wheat OneStack => new Wheat(StackSize);
+            public static readonly int StackSize = 50;
+
+            private int m_count;
+
+            public Wheat(int count)
+            {
+                m_count = Mathf.Clamp(count, 0, StackSize);
+            }
+
+            public static IInventoryItem[] FromCount(int count)
+            {
+                Wheat[] result = new Wheat[Mathf.CeilToInt((float)count / StackSize)];
+                int i = 0;
+
+                while (count > 0)
+                {
+                    result[i] = new Wheat(count);
+                    count -= StackSize;
+                    i++;
+                }
+
+                return result;
+            }
+            
+            public Sprite GetIcon() => Icon;
+            public int GetCount() => m_count; 
+
+            public void SetCount(int count)
+            {
+                m_count = Mathf.Clamp(count, 0, StackSize);
+            }
+            
             public override string ToString() => $"ItemType: Seeds, Count: {GetCount()}";
         }
 
@@ -50,6 +96,29 @@ namespace Player
         public void AddItem(IInventoryItem item)
         {
             m_inventoryItems.Add(item);
+        }
+
+        public void AddItems(IInventoryItem[] items)
+        {
+            foreach (IInventoryItem item in items)
+            {
+                AddItem(item);
+            }
+        }
+
+        public void RemoveTypeByCount<T>(int count)
+        {
+            foreach (IInventoryItem item in m_inventoryItems.OfType<T>())
+            {
+                if (item.GetCount() - count <= 0)
+                {
+                    m_inventoryItems.Remove(item);
+                }
+                else
+                {
+                    item.SetCount(item.GetCount() - count);
+                }
+            }
         }
 
         public T[] GetItemsByType<T>() where T : IInventoryItem => m_inventoryItems.OfType<T>().ToArray();
