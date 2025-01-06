@@ -72,6 +72,12 @@ public class PlayerController : MonoBehaviour
             m_activeMode = ControlModeIsFarm(m_activeMode) ? ControlMode.None : ControlMode.FarmPlow;
         }
 
+        if (PlayerManager.UIManager.IsAnyOpen())
+        {
+            uiTilemap.ClearAllTiles();
+            m_activeMode = ControlMode.None;
+        }
+
         if (ControlModeIsFarm(m_activeMode))
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))

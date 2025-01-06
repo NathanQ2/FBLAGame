@@ -1,4 +1,4 @@
-using System;
+using System.Linq;
 using Player;
 using TMPro;
 using UnityEngine;
@@ -13,6 +13,8 @@ public class UIManager : MonoBehaviour
     
     public GameObject StoreUI;
     public GameObject InventoryUI;
+
+    private GameObject[] Menus => new[] { StoreUI, InventoryUI };
 
     public PlayerManager PlayerManager;
 
@@ -61,6 +63,8 @@ public class UIManager : MonoBehaviour
         InventoryUI.SetActive(false);
     }
 
+    public bool IsAnyOpen() => Menus.Any(obj => obj.activeSelf);
+
     public void ToggleStore()
     {
         if(StoreUI.activeSelf) CloseStore();
@@ -69,6 +73,7 @@ public class UIManager : MonoBehaviour
 
     public void OpenStore()
     {
+        CloseAll();
         StoreUI.SetActive(true);
     }
 
@@ -85,6 +90,7 @@ public class UIManager : MonoBehaviour
 
     public void OpenInventory()
     {
+        CloseAll();
         RefreshInventory();
         InventoryUI.SetActive(true);
     }
