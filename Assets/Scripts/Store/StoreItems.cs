@@ -1,7 +1,5 @@
 // TODO: Fix 'TEMP's
 
-using System;
-
 namespace Store
 {
     public static class StoreItems
@@ -22,20 +20,20 @@ namespace Store
         public static class Pesticide
         {
             public static string Name = "Pesticide";
-            public const int Cost = 350;
+            public const int Cost = GameplayConfig.PesticideCost;
             public static string Description = "TEMP";
             public static string[] Pros = {
                 "Increases Crop Yields"
             };
             public static string[] Cons = {
-                "TEMP"
+                "Doubles the chances of random penalty"
             };
         }
 
         public static class Seeds
         {
             public static string Name => "Seeds";
-            public const int Cost = 50;
+            public const int Cost = GameplayConfig.SeedsCost;
             public static string Description => "Used to plant crops";
         }
     }

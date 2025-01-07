@@ -11,6 +11,7 @@ namespace Player
             public Sprite GetIcon();
             public int GetCount();
             public void SetCount(int count);
+            public int GetStackSize();
         }
 
         public class Seeds : IInventoryItem
@@ -47,6 +48,8 @@ namespace Player
             {
                 m_count = Mathf.Clamp(count, 0, StackSize);
             }
+            
+            public int GetStackSize() => StackSize;
 
             public override string ToString() => $"ItemType: Seeds, Count: {GetCount()}";
         }
@@ -82,11 +85,13 @@ namespace Player
             
             public Sprite GetIcon() => Icon;
             public int GetCount() => m_count; 
-
+            
             public void SetCount(int count)
             {
                 m_count = Mathf.Clamp(count, 0, StackSize);
             }
+            
+            public int GetStackSize() => StackSize;
             
             public override string ToString() => $"ItemType: Seeds, Count: {GetCount()}";
         }
@@ -127,6 +132,7 @@ namespace Player
                 m_count = Mathf.Clamp(count, 0, StackSize);
             }
 
+            public int GetStackSize() => StackSize;
             public override string ToString() => $"ItemType: Pesticide, Count: {GetCount()}";
         }
         
@@ -149,13 +155,15 @@ namespace Player
         {
             foreach (IInventoryItem item in m_inventoryItems.OfType<T>().ToList())
             {
-                if (item.GetCount() - count <= 0)
+                if (item.GetStackSize() < count)
                 {
+                    count -= item.GetStackSize();
                     m_inventoryItems.Remove(item);
                 }
                 else
                 {
                     item.SetCount(item.GetCount() - count);
+                    count -= item.GetCount();
                 }
             }
         }

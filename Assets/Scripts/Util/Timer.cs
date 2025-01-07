@@ -25,9 +25,11 @@ namespace Util
 
         public bool IsFinished() => ElapsedSeconds >= m_time;
 
-        public void Start()
+        public Timer Start()
         {
             IsRunning = true;
+
+            return this;
         }
 
         public void Stop()

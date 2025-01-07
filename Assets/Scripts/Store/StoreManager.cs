@@ -17,7 +17,7 @@ namespace Store
                 return StoreItems.TypeToCost(type);
             case StoreItems.StoreItemType.Pesticide:
                 inventoryItem = null;
-                FarmlandTileData.GrowthScale *= 2;
+                GameplayConfig.MoneyPerHarvest *= 2;
                 GameManager.penaltyChance += 0.2f;
 
                 return StoreItems.TypeToCost(type);

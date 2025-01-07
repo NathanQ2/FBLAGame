@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    public static readonly int StartingMoney = 500;
-
     public UIManager UIManager;
     public StoreManager StoreManager;
     public PlayerInventory Inventory;
 
-    public int CurrentMoney { get; private set; } = StartingMoney;
+    public int CurrentMoney { get; private set; } = GameplayConfig.StartingMoney;
 
     public void Update()
     {
@@ -49,9 +47,14 @@ public class PlayerManager : MonoBehaviour
         return true;
     }
 
-    public void AddMoney(int money)
+    public void AddMoney(int amount)
     {
-        CurrentMoney += money;
+        CurrentMoney += amount;
+    }
+
+    public void RemoveMoney(int amount)
+    {
+        CurrentMoney -= amount;
     }
 
     private void ToggleInventory()

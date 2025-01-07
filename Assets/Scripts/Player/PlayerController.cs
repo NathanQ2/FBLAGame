@@ -103,7 +103,8 @@ public class PlayerController : MonoBehaviour
 
                 if (Input.GetButton("Fire1"))
                 {
-                    tileManager.TryToFarmland(pos);
+                    if (PlayerManager.CurrentMoney > GameplayConfig.PlowCost && tileManager.TryToFarmland(pos))
+                        PlayerManager.RemoveMoney(GameplayConfig.PlowCost);
                 }
             }
             else
@@ -120,14 +121,14 @@ public class PlayerController : MonoBehaviour
             uiTilemap.SetTile(pos, highlightTile);
             
             // Get world tile
-            if (tileManager.CanBecomeFarmlandSeeds(pos) && PlayerInventory.GetCountForType<PlayerInventory.Seeds>() > 0)
+            if (tileManager.CanBecomeFarmlandSeeds(pos) && PlayerInventory.GetCountForType<PlayerInventory.Seeds>() >= GameplayConfig.SeedsLostPerPlant)
             {
                 highlightTile.color = Color.green;
 
-                if (Input.GetButton("Fire1") && PlayerInventory.GetCountForType<PlayerInventory.Seeds>() >= 5)
+                if (Input.GetButton("Fire1")) 
                 {
                     if (tileManager.TryToFarmlandSeeds(pos))
-                        PlayerInventory.RemoveTypeByCount<PlayerInventory.Seeds>(5);
+                        PlayerInventory.RemoveTypeByCount<PlayerInventory.Seeds>(GameplayConfig.SeedsLostPerPlant);
                 }
             }
             else
@@ -152,7 +153,7 @@ public class PlayerController : MonoBehaviour
                 {
                     // Harvest
                     tileManager.TryToFarmland(pos);
-                    PlayerManager.AddMoney(15);
+                    PlayerManager.AddMoney(GameplayConfig.MoneyPerHarvest);
                 }
             }
             else
