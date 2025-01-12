@@ -2,6 +2,7 @@ using Player;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
+using Wilberforce;
 
 public enum ControlMode
 {
@@ -26,6 +27,7 @@ public static class ControlModeUtils
     }
 }
 
+
 public class PlayerController : MonoBehaviour
 {
     private int m_direction = 0;
@@ -43,6 +45,23 @@ public class PlayerController : MonoBehaviour
 
     public PlayerInventory PlayerInventory;
     public PlayerManager PlayerManager;
+
+    public Colorblind Colorblind;
+
+    private Color m_HighlightColorGreen => Colorblind.Type switch
+    {
+        ColorBlindType.Protanopia => Color.green, // red / green colorblindness
+        ColorBlindType.Deuteranopia => Color.green, // red / green colorblindness
+        ColorBlindType.Tritanopia => Color.green, // blue / yellow colorblindness
+        _ => Color.green // None
+    };
+    private Color m_HighlightColorRed => Colorblind.Type switch
+    {
+        ColorBlindType.Protanopia => Color.blue, // red / green colorblindness
+        ColorBlindType.Deuteranopia => Color.blue, // red / green colorblindness
+        ColorBlindType.Tritanopia => Color.red, // blue / yellow colorblindness
+        _ => Color.red // None
+    };
 
     private void Start()
     {
@@ -115,7 +134,7 @@ public class PlayerController : MonoBehaviour
             // Get world tile
             if (tileManager.CanBecomeFarmland(pos))
             {
-                highlightTile.color = Color.green;
+                highlightTile.color = m_HighlightColorGreen;
 
                 if (Input.GetButton("Fire1"))
                 {
@@ -125,7 +144,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                highlightTile.color = Color.red;
+                highlightTile.color = m_HighlightColorRed;
             }
         }
         else if (ActiveMode == ControlMode.FarmPlant)
@@ -139,7 +158,7 @@ public class PlayerController : MonoBehaviour
             // Get world tile
             if (tileManager.CanBecomeFarmlandSeeds(pos) && PlayerInventory.GetCountForType<PlayerInventory.Seeds>() >= GameplayConfig.SeedsLostPerPlant)
             {
-                highlightTile.color = Color.green;
+                highlightTile.color = m_HighlightColorGreen;
 
                 if (Input.GetButton("Fire1")) 
                 {
@@ -149,7 +168,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                highlightTile.color = Color.red;
+                highlightTile.color = m_HighlightColorRed;
             }
         }
         else if (ActiveMode == ControlMode.FarmHarvest)
@@ -163,7 +182,7 @@ public class PlayerController : MonoBehaviour
             // Get world tile
             if (tileManager.CanBeHarvested(pos))
             {
-                highlightTile.color = Color.green;
+                highlightTile.color = m_HighlightColorGreen;
 
                 if (Input.GetButton("Fire1"))
                 {
@@ -174,7 +193,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                highlightTile.color = Color.red;
+                highlightTile.color = m_HighlightColorRed;
             }
         }
     }

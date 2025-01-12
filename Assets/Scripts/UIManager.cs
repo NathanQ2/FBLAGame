@@ -40,7 +40,8 @@ public class UIManager : MonoBehaviour
         m_timers.ForEach(timer => timer.Update(Time.deltaTime));
         m_timers.RemoveAll(timer => timer.IsFinished());
 
-        InfoText.text = @$"Score: {PlayerManager.Score}
+        InfoText.text = @$"Current Day: {PlayerManager.GameManager.CurrentDay}
+Score: {PlayerManager.Score}
 Money: ${PlayerManager.CurrentMoney}
 Control Mode: {ControlModeUtils.ToString(PlayerManager.PlayerController.ActiveMode)}
 Seeds: {PlayerManager.PlayerInventory.GetCountForType<PlayerInventory.Seeds>()}
