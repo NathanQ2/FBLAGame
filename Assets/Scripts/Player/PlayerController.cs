@@ -1,5 +1,6 @@
 using Player;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 
 public enum ControlMode
@@ -8,6 +9,21 @@ public enum ControlMode
     FarmPlow,
     FarmPlant,
     FarmHarvest
+}
+
+public static class ControlModeUtils
+{
+    public static string ToString(ControlMode mode)
+    {
+        return mode switch
+        {
+            ControlMode.None => "None",
+            ControlMode.FarmPlow => "Farm Plow",
+            ControlMode.FarmPlant => "Farm Plant",
+            ControlMode.FarmHarvest => "Farm Harvest",
+            _ => ""
+        };
+    }
 }
 
 public class PlayerController : MonoBehaviour
@@ -23,14 +39,14 @@ public class PlayerController : MonoBehaviour
     public Tile highlightTile;
     public WorldTileManager tileManager;
 
-    private ControlMode m_activeMode;
+    public ControlMode ActiveMode { get; private set; }
 
     public PlayerInventory PlayerInventory;
     public PlayerManager PlayerManager;
 
     private void Start()
     {
-        m_activeMode = ControlMode.None;
+        ActiveMode = ControlMode.None;
     }
 
     void Update()
@@ -68,27 +84,27 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("ToggleFarmMode"))
         {
             uiTilemap.ClearAllTiles();
-            m_activeMode = ControlModeIsFarm(m_activeMode) ? ControlMode.None : ControlMode.FarmPlow;
+            ActiveMode = ControlModeIsFarm(ActiveMode) ? ControlMode.None : ControlMode.FarmPlow;
         }
 
         if (PlayerManager.UIManager.IsAnyOpen())
         {
             uiTilemap.ClearAllTiles();
-            m_activeMode = ControlMode.None;
+            ActiveMode = ControlMode.None;
         }
 
-        if (ControlModeIsFarm(m_activeMode))
+        if (ControlModeIsFarm(ActiveMode))
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
-                m_activeMode = ControlMode.FarmPlow;
+                ActiveMode = ControlMode.FarmPlow;
             if (Input.GetKeyDown(KeyCode.Alpha2))
-                m_activeMode = ControlMode.FarmPlant;
+                ActiveMode = ControlMode.FarmPlant;
             if (Input.GetKeyDown(KeyCode.Alpha3))
-                m_activeMode = ControlMode.FarmHarvest;
+                ActiveMode = ControlMode.FarmHarvest;
             uiTilemap.ClearAllTiles();
         }
 
-        if (m_activeMode == ControlMode.FarmPlow)
+        if (ActiveMode == ControlMode.FarmPlow)
         {
             Vector3 world = camera.ScreenToWorldPoint(Input.mousePosition);
 
@@ -112,7 +128,7 @@ public class PlayerController : MonoBehaviour
                 highlightTile.color = Color.red;
             }
         }
-        else if (m_activeMode == ControlMode.FarmPlant)
+        else if (ActiveMode == ControlMode.FarmPlant)
         {
             Vector3 world = camera.ScreenToWorldPoint(Input.mousePosition);
 
@@ -136,7 +152,7 @@ public class PlayerController : MonoBehaviour
                 highlightTile.color = Color.red;
             }
         }
-        else if (m_activeMode == ControlMode.FarmHarvest)
+        else if (ActiveMode == ControlMode.FarmHarvest)
         {
             Vector3 world = camera.ScreenToWorldPoint(Input.mousePosition);
 

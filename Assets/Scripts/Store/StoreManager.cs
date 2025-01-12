@@ -18,7 +18,8 @@ namespace Store
             case StoreItems.StoreItemType.Pesticide:
                 inventoryItem = null;
                 GameplayConfig.MoneyPerHarvest *= 2;
-                GameManager.penaltyChance += 0.2f;
+                GameManager.PesticidesUsed++;
+                GameManager.PenaltyChance += 0.2f;
 
                 return StoreItems.TypeToCost(type);
             // TODO: add the rest of items

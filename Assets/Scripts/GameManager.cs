@@ -4,6 +4,7 @@ using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
@@ -14,7 +15,8 @@ public class GameManager : MonoBehaviour
     public PlayerManager PlayerManager;
     public UIManager UIManager;
     
-    public float penaltyChance = 0.0f;
+    public float PenaltyChance = 0.0f;
+    public int PesticidesUsed = 0;
 
     public int CurrentDay => Mathf.FloorToInt(CurrentTimeHours / 24);
     public float CurrentTimeHours { get; private set; }
@@ -49,7 +51,7 @@ public class GameManager : MonoBehaviour
      */
     private void OnNewDay()
     {
-        if (Random.value < penaltyChance)
+        if (Random.value < PenaltyChance)
             LaunchPenalty();
     }
 
@@ -64,7 +66,7 @@ public class GameManager : MonoBehaviour
         if (availablePenalties.Length == 0)
             return;
         Penalties.IPenalty penalty = availablePenalties[Mathf.RoundToInt(Random.value * (availablePenalties.Length - 1))];
-        int cost = Mathf.FloorToInt(penalty.Cost * (penaltyChance - 1));
+        int cost = Mathf.FloorToInt(penalty.Cost * (PenaltyChance - 1));
 
         UIManager.InstantiatePenaltyNotification(penalty, cost);
 

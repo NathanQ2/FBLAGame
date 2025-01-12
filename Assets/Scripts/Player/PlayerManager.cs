@@ -6,9 +6,12 @@ public class PlayerManager : MonoBehaviour
 {
     public UIManager UIManager;
     public StoreManager StoreManager;
-    public PlayerInventory Inventory;
+    public GameManager GameManager;
+    public PlayerInventory PlayerInventory;
+    public PlayerController PlayerController;
 
     public int CurrentMoney { get; private set; } = GameplayConfig.StartingMoney;
+    public int Score => Mathf.RoundToInt(CurrentMoney * (1 - GameManager.PenaltyChance));
 
     public void Update()
     {
@@ -42,7 +45,7 @@ public class PlayerManager : MonoBehaviour
         
         CurrentMoney -= StoreManager.Purchase(type, out PlayerInventory.IInventoryItem item);
         if (item is not null)
-            Inventory.AddItem(item);
+            PlayerInventory.AddItem(item);
 
         return true;
     }

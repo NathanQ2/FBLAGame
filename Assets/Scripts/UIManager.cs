@@ -5,6 +5,7 @@ using Player;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Timer = Util.Timer;
 
 public class UIManager : MonoBehaviour
@@ -17,6 +18,9 @@ public class UIManager : MonoBehaviour
     
     public GameObject StoreUI;
     public GameObject InventoryUI;
+
+    [FormerlySerializedAs("MoneyText")]
+    public TextMeshProUGUI InfoText;
 
     private GameObject[] Menus => new[] { StoreUI, InventoryUI };
 
@@ -35,6 +39,12 @@ public class UIManager : MonoBehaviour
     {
         m_timers.ForEach(timer => timer.Update(Time.deltaTime));
         m_timers.RemoveAll(timer => timer.IsFinished());
+
+        InfoText.text = @$"Score: {PlayerManager.Score}
+Money: ${PlayerManager.CurrentMoney}
+Control Mode: {ControlModeUtils.ToString(PlayerManager.PlayerController.ActiveMode)}
+Seeds: {PlayerManager.PlayerInventory.GetCountForType<PlayerInventory.Seeds>()}
+";
     }
 
     public void Open(MenuType menuType)
@@ -129,7 +139,8 @@ public class UIManager : MonoBehaviour
     {
         TextMeshProUGUI[] texts = InventoryUI.GetComponentsInChildren<TextMeshProUGUI>();
         texts[1].SetText($"Money: ${PlayerManager.CurrentMoney}");
-        texts[2].SetText($"Seeds: {PlayerManager.Inventory.GetCountForType<PlayerInventory.Seeds>()}");
+        texts[2].SetText($"Seeds: {PlayerManager.PlayerInventory.GetCountForType<PlayerInventory.Seeds>()}");
+        texts[3].SetText($"Pesticides Used: {PlayerManager.GameManager.PesticidesUsed}");
         // texts[3].SetText($"Wheat: {PlayerManager.Inventory.GetCountForType<PlayerInventory.Wheat>()}");
     }
 
