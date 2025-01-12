@@ -48,18 +48,18 @@ public class PlayerController : MonoBehaviour
 
     public Colorblind Colorblind;
 
-    private Color m_HighlightColorGreen => Colorblind.Type switch
+    private Color m_HighlightColorGreen => Colorblind.ModeType switch
     {
         ColorBlindType.Protanopia => Color.green, // red / green colorblindness
         ColorBlindType.Deuteranopia => Color.green, // red / green colorblindness
-        ColorBlindType.Tritanopia => Color.green, // blue / yellow colorblindness
+        ColorBlindType.Tritanopia => Color.red, // blue / yellow colorblindness
         _ => Color.green // None
     };
-    private Color m_HighlightColorRed => Colorblind.Type switch
+    private Color m_HighlightColorRed => Colorblind.ModeType switch
     {
         ColorBlindType.Protanopia => Color.blue, // red / green colorblindness
         ColorBlindType.Deuteranopia => Color.blue, // red / green colorblindness
-        ColorBlindType.Tritanopia => Color.red, // blue / yellow colorblindness
+        ColorBlindType.Tritanopia => Color.gray, // blue / yellow colorblindness
         _ => Color.red // None
     };
 

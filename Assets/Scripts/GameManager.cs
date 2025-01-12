@@ -41,8 +41,13 @@ public class GameManager : MonoBehaviour
             OnNewDay();
         }
         
-        print($"CurrentTimeHours: {CurrentTimeHours} CurrentDay: {CurrentDay}");
+        // print($"CurrentTimeHours: {CurrentTimeHours} CurrentDay: {CurrentDay}");
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+        
         m_previousDay = CurrentDay;
     }
     

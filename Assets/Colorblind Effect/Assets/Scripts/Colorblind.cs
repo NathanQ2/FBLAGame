@@ -1,6 +1,7 @@
 ﻿// Copyright (c) 2016 Jakub Boksansky, Adam Pospisil - All Rights Reserved
 // Colorblind Effect Unity Plugin 1.0
 using UnityEngine;
+using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -25,7 +26,10 @@ namespace Wilberforce
     public class Colorblind : MonoBehaviour
     {
         // public Parameters  
-		public ColorBlindType Type = ColorBlindType.None;
+		[FormerlySerializedAs("Type")]
+		public ColorBlindType FilterType = ColorBlindType.None;
+		public ColorBlindType ModeType = ColorBlindType.None;
+		
 
         // private Parameters
 		public Shader colorblindShader;
@@ -123,7 +127,7 @@ namespace Wilberforce
 
             // Shader pass
 			// bind the 'Type' attribute to 'type' variable in shader program
-			ColorblindMaterial.SetInt("type", (int)Type);
+			ColorblindMaterial.SetInt("type", (int)FilterType);
 			// run the shader
 			Graphics.Blit (
 				source, // input texture
@@ -142,14 +146,15 @@ namespace Wilberforce
 	public class ColorblindEditor : Editor
 	{	
 		// names appearing in the dropdown menu
-		private readonly GUIContent[] typeTexts = new GUIContent[4] {
+		private readonly GUIContent[] filterTexts = new GUIContent[4] {
 			new GUIContent("Normal Vision"),
 			new GUIContent("Protanopia"),
 			new GUIContent("Deuteranopia"),
 			new GUIContent("Tritanopia")
 		};
 		// label and tooltip for the dropdown menu
-		private readonly GUIContent typeLabelContent = new GUIContent("Type:", "Type of color blindness");
+		private readonly GUIContent filterTypeLabelContent = new GUIContent("Filter Type:", "Type of color blindness");
+		private readonly GUIContent modeTypeLabelContent = new GUIContent("Mode Type:", "Type of color blindness");
 
 		// numbers passed to shader - indices of color-shifting matrices
 		private readonly int[] typeInts = new int[4] { 0, 1, 2, 3 };
@@ -161,7 +166,8 @@ namespace Wilberforce
 			var colorblindScript = target as Colorblind;
 
             // bind the 'Type' parameter of the Colorblind script to dropdown in GUI
-            colorblindScript.Type = (ColorBlindType)EditorGUILayout.IntPopup(typeLabelContent, (int)colorblindScript.Type, typeTexts, typeInts);
+            colorblindScript.FilterType = (ColorBlindType)EditorGUILayout.IntPopup(filterTypeLabelContent, (int)colorblindScript.FilterType, filterTexts, typeInts);
+            colorblindScript.ModeType = (ColorBlindType)EditorGUILayout.IntPopup(modeTypeLabelContent, (int)colorblindScript.ModeType, filterTexts, typeInts);
 
 			// if user made some changes (selected new value from the dropdown) we have to forward the notification
 			if (GUI.changed)
