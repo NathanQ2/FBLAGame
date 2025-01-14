@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c0ad08fd3d88d46169dd6e84368abd16
+guid: edeb8c8cd4234dd439d454b373bca43e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1449063215190161617
-    second: SeedsIcon_0
+      213: -6702707137442767567
+    second: photo-1486754735734-325b5831c3ad_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SeedsIcon_0
+      name: photo-1486754735734-325b5831c3ad_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 17
-        height: 23
+        width: 600
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f274189eea4e3ebe0800000000000000
-      internalID: -1449063215190161617
+      spriteID: 13d9f37fe533bf2a0800000000000000
+      internalID: -6702707137442767567
       vertices: []
       indices: 
       edges: []
@@ -147,8 +147,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      SeedsIcon_0: -1449063215190161617
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
