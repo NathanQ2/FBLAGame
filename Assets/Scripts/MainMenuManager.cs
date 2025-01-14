@@ -1,10 +1,16 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenuManager : MonoBehaviour
 {
     public GameObject controlPanel;
     public GameObject settingPanel;
+
+    public TMP_Dropdown modeDropdown;
+    public TMP_Dropdown filterDropdown;
+    
     public void Play()
     {
         SceneManager.LoadScene(1);
@@ -40,6 +46,12 @@ public class MainMenuManager : MonoBehaviour
     {
         if (settingPanel.activeSelf) CloseSettings();
         else ShowSettings();
+    }
+
+    public void OnSettingsChanged()
+    {
+        PlayerPrefs.SetInt("ColorBlindMode", modeDropdown.value);
+        PlayerPrefs.SetInt("ColorBlindFilter", filterDropdown.value);
     }
 }
 

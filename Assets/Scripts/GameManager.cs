@@ -5,6 +5,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Wilberforce;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour
 
     public PlayerManager PlayerManager;
     public UIManager UIManager;
+    public Colorblind Colorblind;
     
     public float PenaltyChance = 0.0f;
     public int PesticidesUsed = 0;
@@ -30,6 +32,8 @@ public class GameManager : MonoBehaviour
 
     public void Start()
     {
+        Colorblind.ModeType = (ColorBlindType)PlayerPrefs.GetInt("ColorBlindMode");
+        Colorblind.FilterType = (ColorBlindType)PlayerPrefs.GetInt("ColorBlindFilter");
     }
 
     public void Update()
